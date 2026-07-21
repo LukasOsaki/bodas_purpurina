@@ -1,0 +1,270 @@
+/* Bodas de Purpurina — jewel-box gift reveal.
+   Deliberately single dark/velvet world; not meant to invert to a light theme. */
+
+:root {
+  --bg: #241019;
+  --bg-panel: #2f1420;
+  --bg-panel-edge: #3c1c29;
+  --gold: #cda05a;
+  --gold-light: #eccf8d;
+  --blush: #e8b7bd;
+  --cream: #f6ead9;
+  --cream-dim: #d9c6b3;
+
+  --display: 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--body);
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+#ambient {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 460px;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 24px 56px;
+}
+
+.seal-stage,
+.card {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  text-align: center;
+}
+
+/* ---------- seal (closed) state ---------- */
+
+.seal-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.5s ease, transform 0.6s ease;
+}
+
+.seal {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: radial-gradient(circle at 34% 30%, #e6c27e, var(--gold) 55%, #8f6a30 100%);
+  box-shadow:
+    0 0 0 1px rgba(205, 160, 90, 0.35),
+    0 18px 40px -12px rgba(0, 0, 0, 0.65),
+    inset 0 2px 6px rgba(255, 255, 255, 0.35);
+  color: var(--bg);
+  font-family: var(--display);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.5s ease;
+  animation: seal-breathe 3.2s ease-in-out infinite;
+}
+
+.seal:hover {
+  transform: scale(1.04);
+}
+
+.seal:focus-visible {
+  outline: 3px solid var(--cream);
+  outline-offset: 4px;
+}
+
+.seal-label {
+  position: relative;
+  font-size: 1.02rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.seal-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid rgba(236, 207, 141, 0.4);
+}
+
+.seal-ring--2 {
+  inset: -20px;
+  border-color: rgba(236, 207, 141, 0.2);
+}
+
+.seal-hint {
+  margin: 18px 0 0;
+  font-size: 0.85rem;
+  color: var(--cream-dim);
+  text-align: center;
+}
+
+@keyframes seal-breathe {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(205,160,90,.35), 0 18px 40px -12px rgba(0,0,0,.65), inset 0 2px 6px rgba(255,255,255,.35), 0 0 0 rgba(236,207,141,0); }
+  50% { box-shadow: 0 0 0 1px rgba(205,160,90,.35), 0 18px 40px -12px rgba(0,0,0,.65), inset 0 2px 6px rgba(255,255,255,.35), 0 0 26px 6px rgba(236,207,141,.35); }
+}
+
+/* ---------- card (open) state ---------- */
+
+.card {
+  width: 100%;
+  padding: 36px 28px 32px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(236, 207, 141, 0.08), transparent 55%),
+    linear-gradient(180deg, var(--bg-panel), var(--bg-panel-edge));
+  border: 1px solid rgba(205, 160, 90, 0.28);
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7);
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  pointer-events: none;
+}
+
+body.is-open .card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition: opacity 0.7s ease 0.15s, transform 0.7s cubic-bezier(.22,1,.36,1) 0.15s;
+}
+
+body.is-open .seal-stage {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.headline {
+  margin: 0 0 22px;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 8vw, 2.5rem);
+  line-height: 1.18;
+  color: var(--cream);
+  text-wrap: balance;
+}
+
+.photo {
+  margin: 0 0 22px;
+  padding: 10px 10px 26px;
+  background: #fbf6ee;
+  border-radius: 4px;
+  box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.55);
+  transform: rotate(-2.2deg);
+  display: inline-block;
+  max-width: 280px;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+.message {
+  margin: 0 auto 26px;
+  max-width: 34ch;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--cream-dim);
+}
+
+.perforation {
+  height: 0;
+  border-top: 2px dashed rgba(205, 160, 90, 0.35);
+  margin: 0 -28px 26px;
+}
+
+.voucher {
+  padding: 22px 20px 26px;
+  border: 1px solid rgba(236, 207, 141, 0.35);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.voucher-label {
+  margin: 0 0 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blush);
+}
+
+.voucher-brand {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--gold-light);
+}
+
+.voucher-tagline {
+  margin: 0 0 18px;
+  font-size: 0.9rem;
+  color: var(--cream-dim);
+}
+
+.voucher-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid rgba(246, 234, 217, 0.35);
+  padding-bottom: 2px;
+}
+
+.voucher-phone:hover,
+.voucher-phone:focus-visible {
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seal { animation: none; }
+  .card, .seal-stage { transition: opacity 0.3s ease !important; }
+}
